@@ -51,16 +51,16 @@ public class Song {
             e.printStackTrace();
         }
         //Если названия треков, альбомов и исполнителей отсуствуют - то именуем их Unknown
-        if (tag.getFirst(FieldKey.TITLE).equals("")) {
+        if (audioFile.getTag()==null || tag.getFirst(FieldKey.TITLE).equals("")) {
             this.title = "Unknown track";
         } else {
             this.title = tag.getFirst(FieldKey.TITLE);
         }
-        if (tag.getFirst(FieldKey.ALBUM).equals("")) this.album = "Unknown album";
+        if (audioFile.getTag()==null || tag.getFirst(FieldKey.ALBUM).equals("")) this.album = "Unknown album";
         else {
             this.album = tag.getFirst(FieldKey.ALBUM);
         }
-        if (tag.getFirst(FieldKey.ARTIST).equals("")) {
+        if (audioFile.getTag()==null || tag.getFirst(FieldKey.ARTIST).equals("")) {
             this.artist = "Unknown artist";
         } else {
             this.artist = tag.getFirst(FieldKey.ARTIST);

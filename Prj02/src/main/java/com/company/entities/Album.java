@@ -37,7 +37,8 @@ public class Album {
             e.printStackTrace();
         }
         Tag tag = audioFile.getTag();
-        if (tag.getFirst(FieldKey.ALBUM).equals("")) {
+        //Если теги исполнителя пустые, то приваеваем ему имя "Unknown album"
+        if (audioFile.getTag()==null || tag.getFirst(FieldKey.ALBUM).equals("")) {
             this.title = "Unknown album";
         } else {
             this.title = tag.getFirst(FieldKey.ALBUM);

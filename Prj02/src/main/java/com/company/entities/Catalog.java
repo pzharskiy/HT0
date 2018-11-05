@@ -13,14 +13,16 @@ import java.util.*;
 
 
 public class Catalog {
-    private static final Logger logger = Logger.getLogger(Catalog.class.getName());
+    private static final Logger loggerForDublicates = Logger.getLogger("fileOfDublicates");
+    private static final Logger loggerForDublicatesWithoutChecksum = Logger.getLogger("fileOfDublicatesWithoutChecksum");
 
     List<Artist> artists = new ArrayList<Artist>();
 
     public Catalog(String directorylist[]) throws NotExistingDirectoryException {
-        for (String directory: directorylist
-             ) {
+        for (String directory : directorylist
+                ) {
             File folder = new File(directory);
+            //если folder существует, его можно прочитать и он не скрытый (для системных папок, например $Recycle)
             if (folder.exists() && folder.canRead() && !folder.isHidden()) {
                 File listOfFiles[] = folder.listFiles();
                 treeTraversal(directory, listOfFiles); //Рекурсивный обход всего каталога
@@ -52,8 +54,9 @@ public class Catalog {
             html.append(artist.printToFile());
         }
         html.append("</div>\n</body>\n</html>");
-        File f = new File("D:\\test.html");
-        try (BufferedWriter bw = new BufferedWriter((new FileWriter(f)))) {
+
+        File file = new File("./resources/list of songs.html");
+        try (BufferedWriter bw = new BufferedWriter((new FileWriter(file)))) {
             bw.write(html.toString());
 
         } catch (IOException e) {
@@ -68,7 +71,6 @@ public class Catalog {
     private void treeTraversal(String path, File listOfFiles[]) throws AccessException {
         for (File directoryItem : listOfFiles) {
             if (directoryItem.canRead() && !directoryItem.isHidden()) {
-                //????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
                 //Если пункт каталога другой каталог, то вызываем рекурсивную функцию
                 if (directoryItem.isDirectory()) {
                     File folder = new File(directoryItem.getPath());
@@ -88,7 +90,6 @@ public class Catalog {
                     }
                     //Иначе добавляем нового артиста
                     else {
-
                         artists.add(new Artist(directoryItem));
                     }
 
@@ -131,15 +132,15 @@ public class Catalog {
                     ) {
                 dublicates.append(artist.findDublicates());
             }
-            logger.info(dublicates.toString());
+            loggerForDublicates.info(dublicates.toString());
         }
     }
 
     public void findDublicatesWithoutCheckSum() {
-        System.out.println("Дубликаты без контрольной суммы");
         if (artists.isEmpty()) {
             System.out.println("List of artists is empty");
         } else {
+            //Создаем карту, где ключ - это название песни, а значения - список из песен-дубликатов
             Map<String, List<Song>> map = new HashMap<String, List<Song>>();
             map = createMap();
             printMap(map);
@@ -149,10 +150,15 @@ public class Catalog {
     private Map<String, List<Song>> createMap() {
         Map<String, List<Song>> map = new HashMap<String, List<Song>>();
         List<Song> list = new ArrayList<>();
+        //Проходим по всем песням и заносим их в список list
         for (Artist artist : artists
                 ) {
             list.addAll(artist.findDublicatesWithoutCheckSum());
         }
+        /*Проходимя по всему списку list, если в карте не содержится ключ, совпадающий с названием очередной песни,
+         то снова проходим по list и добавляем в subList все песни, совпадающие по названию, исполнитлею и альбому.
+         после этого subList заносим в карту с ключом - названием песни
+        */
         for (Song song : list
                 ) {
             List<Song> subList = new ArrayList<>();
@@ -172,20 +178,22 @@ public class Catalog {
 
     private void printMap(Map map) {
         Set<Map.Entry<String, List<Song>>> set = map.entrySet();
-        List<Song> helpList;
         StringBuilder dublicates = new StringBuilder();
         for (Map.Entry<String, List<Song>> me : set) {
-            helpList = me.getValue();
+            //Если список значений песен для очереденого ключа карты содердит больше одной песни, то значит, что для данной песни есть дубликаты - записываем в tringBuilder
             if (me.getValue().size() > 1) {
-                dublicates.append("\n" + helpList.get(0).getArtist() + " " + helpList.get(0).getAlbum() + " " + helpList.get(0).getTitle() + ":\n");
-                for (Song song : helpList
+                dublicates.append("\n" + me.getValue().get(0).getArtist() + " " + me.getValue().get(0).getAlbum() + " " + me.getValue().get(0).getTitle() + ":\n");
+                for (Song song : me.getValue()
                         ) {
                     dublicates.append("\t" + song.getPath() + "\n");
 
                 }
             }
         }
-        logger.info(dublicates.toString());
+
+        loggerForDublicatesWithoutChecksum.info(dublicates.toString());
+
+
     }
 }
 

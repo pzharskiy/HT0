@@ -3,6 +3,7 @@ package com.company.entities;
 import org.apache.log4j.Logger;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -39,7 +40,8 @@ public class Artist {
             e.printStackTrace();
         }
         Tag tag = audioFile.getTag();
-        if (tag.getFirst(FieldKey.ARTIST).equals(""))
+        //Если теги исполнителя пустые, то приваеваем ему имя "Unknown artist"
+        if (audioFile.getTag()==null || tag.getFirst(FieldKey.ARTIST).equals(""))
         {
             this.name="Unknown artist";
         }
