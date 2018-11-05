@@ -44,12 +44,13 @@ public class Song {
         Tag tag = audioFile.getTag();
         AudioHeader audioHeader = audioFile.getAudioHeader(); ///?
 
+        //Считаем Контрольную сумму файла
         try {
             this.checkSum = (new MD5Checksum().getMD5Checksum(song.getPath()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        //Если названия треков, альбомов и исполнителей отсуствуют - то именуем их Unknown
         if (tag.getFirst(FieldKey.TITLE).equals("")) {
             this.title = "Unknown track";
         } else {

@@ -7,9 +7,10 @@ import com.company.exceptions.NotExistingDirectoryException;
 public class Main {
     public static void main(String[] args) {
         // write your code here
-
+ ////XНЕ ЗАБЫТЬ ПОМЕНЯТЬ КАТАЛОГ НА КОМАНДНУЮ СТРОКУ!!!!!
+        String arg[]={"d:/catalogtest2/", "d:/catalogtest1/"};
         try {
-            Catalog catalog = new Catalog("d:/catalogtest2/");
+            Catalog catalog = new Catalog(arg);
             catalog.printToFile();
             catalog.findDublicates();
             catalog.findDublicatesWithoutCheckSum();

@@ -72,7 +72,7 @@ public class Room implements RoomInterface {
     public void delete(Furniture furniture) throws LackOfFurnitureException {
 
         if (furnitures.contains(furniture)) {
-            furnitures.remove(furniture); //Удаляет дублирущиеся объекты
+            furnitures.remove(furniture);
         } else {
             throw new LackOfFurnitureException("Запрашиваемый объект не найден или не существует");
         }
@@ -83,7 +83,7 @@ public class Room implements RoomInterface {
     public void delete(Lightbulb lightbulb) throws LackOfLightbulbException {
 
         if (lightbulbs.contains(lightbulb)) {
-            lightbulbs.remove(lightbulb); //Удаляет дублирущиеся объекты
+            lightbulbs.remove(lightbulb);
         } else {
             throw new LackOfLightbulbException("Запрашиваемый объект не найден или не существует");
         }

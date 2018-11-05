@@ -4,14 +4,6 @@ import com.company.entities.Artist;
 import com.company.exceptions.AccessException;
 import com.company.exceptions.NotExistingDirectoryException;
 import org.apache.log4j.Logger;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,13 +17,16 @@ public class Catalog {
 
     List<Artist> artists = new ArrayList<Artist>();
 
-    public Catalog(String directory) throws NotExistingDirectoryException {
-        File folder = new File(directory);
-        if (folder.exists() && folder.canRead() && !folder.isHidden()) {
-            File listOfFiles[] = folder.listFiles();
-            treeTraversal(directory, listOfFiles); //Рекурсивный обход всего каталога
-        } else
-            throw new NotExistingDirectoryException("Данной директории не существуют, она является скрытой, или ее невозможно прочитать. Проверьте введенный вами путь");
+    public Catalog(String directorylist[]) throws NotExistingDirectoryException {
+        for (String directory: directorylist
+             ) {
+            File folder = new File(directory);
+            if (folder.exists() && folder.canRead() && !folder.isHidden()) {
+                File listOfFiles[] = folder.listFiles();
+                treeTraversal(directory, listOfFiles); //Рекурсивный обход всего каталога
+            } else
+                throw new NotExistingDirectoryException("Данной директории не существуют, она является скрытой, или ее невозможно прочитать. Проверьте введенный вами путь: " + directory);
+        }
     }
 
     public void print() {
@@ -181,7 +176,6 @@ public class Catalog {
         StringBuilder dublicates = new StringBuilder();
         for (Map.Entry<String, List<Song>> me : set) {
             helpList = me.getValue();
-            // System.out.println(helpList.get(0).getTitle());
             if (me.getValue().size() > 1) {
                 dublicates.append("\n" + helpList.get(0).getArtist() + " " + helpList.get(0).getAlbum() + " " + helpList.get(0).getTitle() + ":\n");
                 for (Song song : helpList
