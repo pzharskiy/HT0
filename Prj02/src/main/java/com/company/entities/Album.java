@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class Album {
-    private static final Logger logger2 = Logger.getLogger(Catalog.class.getName());
     private String title;
     private List<Song> songs = new ArrayList<Song>();
     public static int countOfDublicates = 1;
@@ -38,7 +37,7 @@ public class Album {
         }
         Tag tag = audioFile.getTag();
         //Если теги исполнителя пустые, то приваеваем ему имя "Unknown album"
-        if (audioFile.getTag()==null || tag.getFirst(FieldKey.ALBUM).equals("")) {
+        if (audioFile.getTag() == null || tag.getFirst(FieldKey.ALBUM).equals("")) {
             this.title = "Unknown album";
         } else {
             this.title = tag.getFirst(FieldKey.ALBUM);

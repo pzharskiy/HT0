@@ -1,9 +1,7 @@
 package com.company.entities;
 
-import org.apache.log4j.Logger;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -13,7 +11,8 @@ import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Artist {
     private String name;
@@ -41,11 +40,9 @@ public class Artist {
         }
         Tag tag = audioFile.getTag();
         //Если теги исполнителя пустые, то приваеваем ему имя "Unknown artist"
-        if (audioFile.getTag()==null || tag.getFirst(FieldKey.ARTIST).equals(""))
-        {
-            this.name="Unknown artist";
-        }
-        else {
+        if (audioFile.getTag() == null || tag.getFirst(FieldKey.ARTIST).equals("")) {
+            this.name = "Unknown artist";
+        } else {
             this.name = tag.getFirst(FieldKey.ARTIST);
         }
         albums.add(new Album(directoryItem));
@@ -60,7 +57,7 @@ public class Artist {
     }
 
     String printToFile() {
-        StringBuilder html= new StringBuilder(" <h3>\n " + name + " </h3>\n <h4>\n ");
+        StringBuilder html = new StringBuilder(" <h3>\n " + name + " </h3>\n <h4>\n ");
         for (Album album : albums
                 ) {
             html.append(album.printToFile());
@@ -81,7 +78,7 @@ public class Artist {
     }
 
     Album getAlbum(File directoryItem) {
-        Album checkingAlbum=new Album(directoryItem);
+        Album checkingAlbum = new Album(directoryItem);
         //Проверка, существует ли альбом переданной песни (файла)
         for (Album album : albums
                 ) {
@@ -120,7 +117,7 @@ public class Artist {
                 ) {
             dublicates.append(album.findDublicates());
         }
-        return  dublicates.toString();
+        return dublicates.toString();
     }
 
     List<Song> findDublicatesWithoutCheckSum() {
