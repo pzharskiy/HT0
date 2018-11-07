@@ -42,7 +42,7 @@ public class Song {
             e.printStackTrace();
         }
         Tag tag = audioFile.getTag();
-        AudioHeader audioHeader = audioFile.getAudioHeader(); ///?
+        AudioHeader audioHeader = audioFile.getAudioHeader();
 
         //Считаем Контрольную сумму файла
         try {
@@ -126,8 +126,6 @@ public class Song {
         int hash = title.hashCode();
         return hash;
     }
-
-    //Возможно стоит удалить их
 
     String getArtist() {
         return artist;

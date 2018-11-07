@@ -25,6 +25,7 @@ public class Artist {
     Artist(File directoryItem) {
         AudioFile audioFile = null;
 
+        //Чтение аудиофайла и его тегов.
         try {
             audioFile = AudioFileIO.read(directoryItem);
         } catch (CannotReadException e) {
@@ -60,7 +61,7 @@ public class Artist {
         StringBuilder html = new StringBuilder(" <h3>\n " + name + " </h3>\n <h4>\n ");
         for (Album album : albums
                 ) {
-            html.append(album.printToFile());
+                html.append(album.printToFile());
         }
         html.append("</h4>\n");
         return html.toString();
@@ -113,6 +114,7 @@ public class Artist {
 
     String findDublicates() {
         StringBuilder dublicates = new StringBuilder();
+        //В каждом альбоме идет поиск песен-дубликатов.
         for (Album album : albums
                 ) {
             dublicates.append(album.findDublicates());
@@ -122,7 +124,7 @@ public class Artist {
 
     List<Song> findDublicatesWithoutCheckSum() {
         List<Song> list = new ArrayList<Song>();
-        //Вернуть список со всеми песнями и распределить их по карте по ключу - контрольной сумме
+        //Вернуть список со всеми песнями
         for (Album album : albums
                 ) {
             list.addAll(album.findDublicatesWithoutCheckSum());

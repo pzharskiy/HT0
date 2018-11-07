@@ -3,6 +3,8 @@ package com.company.helpers;
 public class Time {
     public static String getDurationString(int seconds) {
 
+        //Для приведения времени из секунд, в формат 00:00:00
+
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
         seconds = seconds % 60;

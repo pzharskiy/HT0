@@ -1,6 +1,5 @@
 package com.company.entities;
 
-import com.company.entities.Artist;
 import com.company.exceptions.AccessException;
 import com.company.exceptions.NotExistingDirectoryException;
 import org.apache.log4j.Logger;
@@ -18,16 +17,16 @@ public class Catalog {
 
     List<Artist> artists = new ArrayList<Artist>();
 
-    public Catalog(String directorylist[]) throws NotExistingDirectoryException {
+    public Catalog(String directorylist[]) throws NotExistingDirectoryException, AccessException {
         for (String directory : directorylist
                 ) {
             File folder = new File(directory);
             //если folder существует, его можно прочитать и он не скрытый (для системных папок, например $Recycle)
-            if (folder.exists() && folder.canRead() && !folder.isHidden()) {
+            if (!folder.exists()) {throw new NotExistingDirectoryException("Данной директории не существуют, она является скрытой, или ее невозможно прочитать. Проверьте введенный вами путь: " + directory);}
+            if (folder.canRead() && !folder.isHidden()) {
                 File listOfFiles[] = folder.listFiles();
                 treeTraversal(directory, listOfFiles); //Рекурсивный обход всего каталога
-            } else
-                throw new NotExistingDirectoryException("Данной директории не существуют, она является скрытой, или ее невозможно прочитать. Проверьте введенный вами путь: " + directory);
+            } else  throw new AccessException("Данная директория является скрытой, или ее невозможно прочитать. Проверьте введенный вами путь: " + directory);
         }
     }
 
@@ -68,7 +67,7 @@ public class Catalog {
         artists.add(new Artist(directoryItem));
     }
 
-    private void treeTraversal(String path, File listOfFiles[]) throws AccessException {
+    private void treeTraversal(String path, File listOfFiles[])  {
         for (File directoryItem : listOfFiles) {
             if (directoryItem.canRead() && !directoryItem.isHidden()) {
                 //Если пункт каталога другой каталог, то вызываем рекурсивную функцию
@@ -95,7 +94,6 @@ public class Catalog {
 
                 }
             }
-            //else throw new AccessException("Нет доступа");
         }
     }
 
@@ -113,6 +111,7 @@ public class Catalog {
     }
 
     private boolean isMP3(File directoryItem) {
+        //Отсекает от имени файла только расширение и сравниваем его с "mp3"
         String extension = "";
         int i = directoryItem.getName().lastIndexOf('.');
         if (i > 0) {

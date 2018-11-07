@@ -35,7 +35,7 @@ public class Room implements RoomInterface {
     @Override
     public void add(Furniture furniture) {
         furnitures.add(furniture);
-        //Если мебель мягкая, то добавляем ее максимальные размеры, иначе - размеры твердой мебели
+        //Если мебель мягкая, то добавляем к занимаемой площади ее максимальные размеры, иначе - размеры твердой мебели
         if (furniture instanceof FoldingFurniture) occupiedArea += ((FoldingFurniture) furniture).getMaxSize();
         else occupiedArea += furniture.getSize();
     }
@@ -102,7 +102,7 @@ public class Room implements RoomInterface {
     @Override
     public boolean checkIllumination() {
 
-        if (illumination <= MAX_ILLUMINATION && illumination >= MIN_ILLUMINATION) {
+        if ((illumination <= MAX_ILLUMINATION) && (illumination >= MIN_ILLUMINATION)) {
             return true;
         } else return false;
     }
@@ -145,7 +145,6 @@ public class Room implements RoomInterface {
     }
 
 }
-
 
     @Override
     public boolean isValid() {

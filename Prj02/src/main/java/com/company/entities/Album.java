@@ -1,6 +1,5 @@
 package com.company.entities;
 
-import org.apache.log4j.Logger;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -17,8 +16,8 @@ import java.util.*;
 public class Album {
     private String title;
     private List<Song> songs = new ArrayList<Song>();
+    /*Переменная для подсчетов дубликатов и их вывода в файл*/
     public static int countOfDublicates = 1;
-//    Map<String,List<Song>> map = new HashMap<>();
 
     Album(File directoryItem) {
         AudioFile audioFile = null;
@@ -130,7 +129,7 @@ public class Album {
 
     private String printMap(Map map) {
         StringBuilder dublicates = new StringBuilder();
-        //Переводим карту в множество для выводы информации
+        //Переводим карту в множество для вывода информации
         Set<Map.Entry<String, List<Song>>> set = map.entrySet();
         List<Song> list;
         if (!set.isEmpty()) {
